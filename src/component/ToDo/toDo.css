@@ -1,0 +1,19 @@
+.container {
+    margin: 12px;
+    padding: 45px;
+
+}
+.middleSection {
+    height: 250px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 250px;
+}
+
+.header {
+    height: 50px;
+}
+
+.footer {
+    height: 50px;
+}
