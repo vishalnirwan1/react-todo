@@ -1,15 +1,19 @@
 import React, { Component } from "react";
 import { Modal } from 'react-bootstrap';
-import { Button } from '@material-ui/core';
 
 
 class ToDoInput extends Component {
     render() {
-        const { show, onHide, item, handleChange, handleSubmit, editItem } = this.props;
+        const { show, onHide, item, handleChange, handleSubmit, editItem, error } = this.props;
+        const submitt = function (e) {
+            e.preventDefault();
+            handleSubmit();
+            onHide();
+        }
         return (
             <div>
-                <Modal show={show} onHide={onHide}>
-                    <form onSubmit={handleSubmit}>
+                <Modal show={show} onHide={() => onHide(editItem)}>
+                    <form onSubmit={submitt}>
                         <Modal.Header closeButton>
                             <Modal.Title>To Do Input</Modal.Title>
                         </Modal.Header>
@@ -24,15 +28,12 @@ class ToDoInput extends Component {
                             </div>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={onHide}>
-                                Close
-                        </Button>
-                            <button type='submit' variant="primary" className={
-                                editItem? 'btn btn-success'
-                                : 'btn btn-primary'
+                            <button type='submit' disabled={error} variant="primary" className={
+                                editItem ? 'btn btn-success'
+                                    : 'btn btn-primary'
                             } >
-                                {editItem ? 'Edit Item' : 'Add Item'}
-                        </button>
+                                {editItem ? 'Edit Task' : 'Add Task'}
+                            </button>
                         </Modal.Footer>
                     </form>
                 </Modal>

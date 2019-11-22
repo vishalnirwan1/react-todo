@@ -23,35 +23,69 @@ class ToDo extends Component {
             items: [],
             id: uuid(),
             item: '',
-            editItem: false
+            editItem: false,
+            error: true
         };
     }
 
-    handleClose() {
-        this.setState({ show: false })
+    handleClose(action = false) {
+        if (action) {
+            const newItem = {
+                id: this.state.id,
+                title: this.state.item,
+            }
+            const updatedItems = [...this.state.items, newItem];
+
+            this.setState({
+                items: updatedItems,
+                item: '',
+                id: uuid(),
+                editItem: false
+            });
+        }
+        this.setState({
+            show: false,
+            editItem: false,
+            item: ''
+        })
     }
     handleShow() {
         this.setState({ show: true })
     }
     handleChange(e) {
         this.setState({
+            error: false,
             item: e.target.value
         })
     }
-    handleSubmit(e) {
-        e.preventDefault();
+    handleSubmit() {
         const newItem = {
             id: this.state.id,
             title: this.state.item,
-
         }
-        const updatedItems = [...this.state.items, newItem];
-
+        let arrList = [...this.state.items];
+        let isItem = false;
+        if (arrList.length) {
+            isItem = this.state.items.some(item => {
+                console.log('>>.', item);
+                return item.id === newItem.id;
+            })
+        }
+        if (!isItem) {
+            arrList = [...arrList, newItem];
+        }
+        const updatedItems = arrList.map((item) => {
+            if (item.id === newItem.id) {
+                item.title = newItem.title;
+            }
+            return item;
+        })
         this.setState({
             items: updatedItems,
             item: '',
             id: uuid(),
-            editItem: false
+            editItem: false,
+            error: true
         });
     }
     clearList() {
@@ -66,11 +100,11 @@ class ToDo extends Component {
         });
     }
     handleEdit(id) {
-        const filteredItems = this.state.items.filter(item => item.id !== id);
+        // const filteredItems = this.state.items.filter(item => item.id !== id);
         const selectedItems = this.state.items.find(item => item.id === id);
 
         this.setState({
-            items: filteredItems,
+            // items: items,
             item: selectedItems.title,
             editItem: true,
             id: id
@@ -83,7 +117,7 @@ class ToDo extends Component {
                 <Grid container spacing={3}>
                     <Grid item xs={4}>
                         {/* <Paper className='header'></Paper> */}
-                        <img className="logo-icon" src="https://lh3.googleusercontent.com/9_zJhLq3U7TTPdagXZzauMIbyTiBsdCI1Gl1mes2WuE1ZNPnsHyWnNGfqDIsGD9FWZQl=s180-rw" width="130" height="130" alt="TodoMVC"></img>
+                        <img className="logo-icon" src="https://lh3.googleusercontent.com/9_zJhLq3U7TTPdagXZzauMIbyTiBsdCI1Gl1mes2WuE1ZNPnsHyWnNGfqDIsGD9FWZQl=s180-rw" width="100" height="100" alt="TodoMVC"></img>
                     </Grid>
                     <Grid item xs={8}>
                         <Paper className='header'><b>TODO APP</b></Paper>
@@ -113,6 +147,7 @@ class ToDo extends Component {
                     handleChange={this.handleChange}
                     handleSubmit={this.handleSubmit}
                     editItem={this.state.editItem}
+                    error={this.state.error}
                 />
             </div>
         )
