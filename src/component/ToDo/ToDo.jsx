@@ -34,13 +34,28 @@ class ToDo extends Component {
                 id: this.state.id,
                 title: this.state.item,
             }
-            const updatedItems = [...this.state.items, newItem];
-
+            let arrList = [...this.state.items];
+            let isItem = false;
+            if (arrList.length) {
+                isItem = this.state.items.some(item => {
+                    return item.id === newItem.id;
+                })
+            }
+            if (!isItem) {
+                arrList = [...arrList, newItem];
+            }
+            const updatedItems = arrList.map((item) => {
+                if (item.id === newItem.id) {
+                    item.title = newItem.title;
+                }
+                return item;
+            })
             this.setState({
                 items: updatedItems,
                 item: '',
                 id: uuid(),
-                editItem: false
+                editItem: false,
+                error: true
             });
         }
         this.setState({
