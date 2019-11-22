@@ -109,7 +109,6 @@ class ToDo extends Component {
             id: id
         });
     }
-
     render() {
         return (
             <div className='container'>
