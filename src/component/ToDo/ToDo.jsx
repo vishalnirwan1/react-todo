@@ -67,7 +67,6 @@ class ToDo extends Component {
         let isItem = false;
         if (arrList.length) {
             isItem = this.state.items.some(item => {
-                console.log('>>.', item);
                 return item.id === newItem.id;
             })
         }
